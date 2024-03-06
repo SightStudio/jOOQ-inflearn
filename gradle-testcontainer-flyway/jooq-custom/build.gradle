@@ -1,0 +1,16 @@
+plugins {
+    id 'java'
+}
+
+jar { enabled = true }
+
+group = 'org.sight.jooq.custom.generator'
+version = '0.0.1-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation "org.jooq:jooq-codegen:${jooqVersion}"
+}
