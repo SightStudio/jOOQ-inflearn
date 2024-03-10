@@ -60,7 +60,13 @@ tasks {
 dependencies {
 
 	implementation 'org.springframework.boot:spring-boot-starter'
-	implementation 'org.springframework.boot:spring-boot-starter-jooq'
+
+	implementation "org.jooq:jooq:${jooqVersion}"
+
+	implementation ('org.springframework.boot:spring-boot-starter-jooq') {
+		exclude group: 'org.jooq:jooq'
+	}
+
 	implementation 'org.flywaydb:flyway-core'
 	implementation 'org.flywaydb:flyway-mysql'
 	runtimeOnly 'com.mysql:mysql-connector-j'
