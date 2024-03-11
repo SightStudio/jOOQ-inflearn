@@ -1,0 +1,18 @@
+version: '3.8'
+services:
+  sakila-mysql:
+    image: mysql:8.0.35
+
+    # 애플 실리콘 맥을 사용하는 경우 아래 platform 을 주석처리 해제
+    # platform: linux/amd64
+    volumes:
+      - sakila_volume:/data
+    ports:
+      - '3306:3306'
+    environment:
+      MYSQL_ROOT_PASSWORD: passwd
+      MYSQL_DATABASE: sakila
+    command:
+      [ 'mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci', '--lower_case_table_names=1']
+volumes:
+  sakila_volume:
