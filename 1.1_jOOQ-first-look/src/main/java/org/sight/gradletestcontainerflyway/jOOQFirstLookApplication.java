@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class GradleTestContainersFlywayApplication {
+public class jOOQFirstLookApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(GradleTestContainersFlywayApplication.class, args);
+        SpringApplication.run(jOOQFirstLookApplication.class, args);
     }
 
 }
