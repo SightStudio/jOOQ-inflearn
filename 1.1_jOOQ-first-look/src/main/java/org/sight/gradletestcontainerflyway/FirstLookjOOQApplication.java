@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class jOOQFirstLookApplication {
+public class FirstLookjOOQApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(jOOQFirstLookApplication.class, args);
+        SpringApplication.run(FirstLookjOOQApplication.class, args);
     }
 
 }
