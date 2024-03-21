@@ -1,4 +1,4 @@
-package org.sight.gradletestcontainerflyway;
+package org.sight.application;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

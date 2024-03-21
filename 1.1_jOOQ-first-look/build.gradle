@@ -22,6 +22,14 @@ repositories {
 	mavenCentral()
 }
 
+sourceSets {
+	main {
+		java {
+			srcDirs = ["src/main/java", "src/generated"]
+		}
+	}
+}
+
 dependencies {
 
 	implementation 'org.springframework.boot:spring-boot-starter'
@@ -77,6 +85,10 @@ jooq {
 						fluentSetters = true
 						javaTimeTypes = true
 						deprecated = false
+					}
+
+					target {
+						directory = 'src/generated'
 					}
 				}
 			}
