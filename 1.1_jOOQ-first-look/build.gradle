@@ -41,7 +41,7 @@ dependencies {
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-	jooqGenerator 'com.mysql:mysql-connector-j:8.2.0'
+	jooqGenerator 'com.mysql:mysql-connector-j'
 	jooqGenerator "org.jooq:jooq:${jooqVersion}"
 	jooqGenerator "org.jooq:jooq-meta:${jooqVersion}"
 }
