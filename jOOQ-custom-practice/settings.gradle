@@ -1,0 +1,2 @@
+rootProject.name = 'jOOQ-custom-practice'
+include 'jooq-custom'
