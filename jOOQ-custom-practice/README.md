@@ -6,6 +6,15 @@
 
 ### step 2. build.gradle 설정
 
+```jOOQ-custom > build.gradle```
+```java
+dependencies {
+    implementation "org.jooq:jooq-codegen:${jooqVersion}"
+    runtimeOnly 'com.mysql:mysql-connector-j:8.2.0'
+}
+```
+
+```java/jooq/custom/generator/JPrefixGeneratorStrategy.java```
 ```java
 public class JPrefixGeneratorStrategy extends DefaultGeneratorStrategy {
 
@@ -16,6 +25,13 @@ public class JPrefixGeneratorStrategy extends DefaultGeneratorStrategy {
         }
         return super.getJavaClassName(definition, mode);
     }
+}
+```
+
+gradle dependency 추가
+```groovy
+dependencies {
+    jooqGenerator project(':jOOQ-custom')
 }
 ```
 
@@ -30,7 +46,7 @@ jooq {
 
         database {
             name = 'org.jooq.meta.mysql.MySQLDatabase'
-            unsignedTypes = false
+            unsignedTypes = true
             schemata {
                 schema {
                     inputSchema = 'sakila'
@@ -61,6 +77,11 @@ jooq {
 ```
 
 ### step 4. jOOQ runtime configuration 설정
+
+application.properties
+```properties
+logging.level.org.jooq.tools.LoggerListener=DEBUG
+```
 
 Spring Boot 3.x ~
 ```java
