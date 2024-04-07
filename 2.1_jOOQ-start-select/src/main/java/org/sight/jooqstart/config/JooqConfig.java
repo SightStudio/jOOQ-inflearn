@@ -1,4 +1,4 @@
-package org.sight.jooqcustompractice.config;
+package org.sight.jooqstart.config;
 
 import org.jooq.conf.Settings;
 import org.springframework.context.annotation.Bean;

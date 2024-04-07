@@ -1,4 +1,4 @@
-package org.sight.jooqcustompractice;
+package org.sight.jooqstart;
 
 import org.jooq.DSLContext;
 import org.junit.jupiter.api.Test;
