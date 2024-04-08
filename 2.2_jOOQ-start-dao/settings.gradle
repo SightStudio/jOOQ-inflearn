@@ -1,0 +1,2 @@
+rootProject.name = 'jOOQ-start-dao'
+include 'jooq-custom'
