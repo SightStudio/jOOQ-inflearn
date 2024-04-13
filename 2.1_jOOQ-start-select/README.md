@@ -26,7 +26,7 @@ forcedTypes {
 
 ### step 2. 도메인 객체 및 DTO 생성
 
-도메인 엔티티
+도메인 모델
 [FilmWithActors.java](src%2Fmain%2Fjava%2Forg%2Fsight%2Fjooqstart%2Ffilm%2FFilmWithActors.java)  
 [SimpleFilmInfo.java](src%2Fmain%2Fjava%2Forg%2Fsight%2Fjooqstart%2Ffilm%2FSimpleFilmInfo.java)
 

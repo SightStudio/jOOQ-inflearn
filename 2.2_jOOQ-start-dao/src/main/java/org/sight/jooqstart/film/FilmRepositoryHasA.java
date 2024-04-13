@@ -19,13 +19,17 @@ public class FilmRepositoryHasA {
     private final DSLContext dslContext;
     private final JFilm FILM = JFilm.FILM;
 
-    public FilmRepositoryHasA(Configuration configuration) {
+    public FilmRepositoryHasA(Configuration configuration, DSLContext dslContext) {
         this.dao = new FilmDao(configuration);
-        this.dslContext = configuration.dsl();
+        this.dslContext = dslContext;
     }
 
     public Film findById(Long id) {
         return dao.fetchOneByJFilmId(id);
+    }
+
+    public List<Film> fetchRangeOfLength(Integer start, Integer end) {
+        return dao.fetchRangeOfJLength(start, end);
     }
 
     public SimpleFilmInfo findByIdAsSimpleFilmInfo(Long id) {

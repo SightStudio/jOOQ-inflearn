@@ -1,44 +1,16 @@
-# 섹션 2-1. jOOQ Generated DAO 사용하기
+package org.sight.jooqstart;
 
-### 1. Generated DAO 위치 확인
-![dao.png](readme-asset/dao.png)
+import org.jooq.generated.tables.pojos.Film;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.sight.jooqstart.film.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
-### step 2. 상속형태로 DAO 사용
+import java.util.List;
 
-```java
-@Repository
-public class FilmRepositoryIsA extends FilmDao {
+import static org.assertj.core.api.Assertions.assertThat;
 
-    private final DSLContext dslContext;
-    private final JFilm FILM = JFilm.FILM;
-
-    public FilmRepositoryIsA(Configuration configuration, DSLContext dslContext) {
-        super(configuration);
-        this.dslContext = dslContext;
-    }
-}
-```
-
-### step 3. 컴포지션 관계로 DAO 사용
-
-```java
-@Repository
-public class FilmRepositoryHasA {
-
-    private final FilmDao dao;
-    private final DSLContext dslContext;
-    private final JFilm FILM = JFilm.FILM;
-
-    public FilmRepositoryHasA(Configuration configuration, DSLContext dslContext) {
-        this.dao = new FilmDao(configuration);
-        this.dslContext = dslContext;
-    }
-}
-```
-
-### step 4. 테스트 코드로 동작확인
-
-```java
 @SpringBootTest
 public class JooqDaoWrapperTest {
 
@@ -86,7 +58,3 @@ public class JooqDaoWrapperTest {
         );
     }
 }
-```
-
-### 별첨. generated DAO에서 필드에 jPrefix 가 붙는 이슈
-https://github.com/jOOQ/jOOQ/issues/15926 (3.20에서 해결 후 릴리즈 예정)
