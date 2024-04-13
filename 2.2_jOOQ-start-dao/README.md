@@ -1,4 +1,4 @@
-# 섹션 2-1. jOOQ Generated DAO 사용하기
+# 섹션 2-2. jOOQ Generated DAO 사용하기
 
 ### 1. Generated DAO 위치 확인
 ![dao.png](readme-asset/dao.png)
