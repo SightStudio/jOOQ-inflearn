@@ -1,0 +1,2 @@
+rootProject.name = 'jOOQ-start-condition'
+include 'jooq-custom'
