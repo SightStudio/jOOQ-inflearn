@@ -50,8 +50,8 @@ public class ActorRepository {
         final JFilm FILM = JFilm.FILM;
 
         Map<Actor, List<Film>> actorListMap = dslContext.select(
-                        DSL.row(ACTOR.fields()).as("actors"),
-                        DSL.row(FILM.fields()).as("films")
+                    DSL.row(ACTOR.fields()).as("actors"),
+                    DSL.row(FILM.fields()).as("films")
                 )
                 .from(ACTOR)
                 .join(FILM_ACTOR)

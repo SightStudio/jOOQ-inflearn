@@ -55,9 +55,9 @@ public class CategoryRepository {
                 )
                 .from(CATEGORY)
                 .join(FILM_CATEGORY)
-                .on(CATEGORY.CATEGORY_ID.eq(FILM_CATEGORY.CATEGORY_ID))
+                    .on(CATEGORY.CATEGORY_ID.eq(FILM_CATEGORY.CATEGORY_ID))
                 .join(FILM)
-                .on(FILM_CATEGORY.FILM_ID.eq(FILM.FILM_ID))
+                    .on(FILM_CATEGORY.FILM_ID.eq(FILM.FILM_ID))
                 .where(
                         contains(CATEGORY.NAME, name)
                 )
