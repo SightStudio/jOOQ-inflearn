@@ -7,14 +7,15 @@ import org.jooq.tools.StringUtils;
 
 public class JooqStringConditionUtils {
 
-    public static Condition contains(Field<String> field, String value) {
+    public static Condition containsIfNotBlank(Field<String> field, String value) {
         if (StringUtils.isBlank(value)) {
             return DSL.noCondition();
         }
-        return field.contains(value);
+
+        return field.like("%" + value + "%");
     }
 
-    public static Condition eqString(Field<String> field, String value) {
+    public static Condition eqIfNotBlank(Field<String> field, String value) {
         if (StringUtils.isBlank(value)) {
             return DSL.noCondition();
         }

@@ -1,92 +1,95 @@
-# 섹션 2-2. jOOQ Generated DAO 사용하기
+# 섹션 2-3. 조건절 및 동적 조건절 만들기
 
-### 1. Generated DAO 위치 확인
-![dao.png](readme-asset/dao.png)
+### 1. AND 절과 OR 절
 
-### step 2. 상속형태로 DAO 사용
+#### 1.1 AND 절
+```java
+private final DSLContext dslContext;
+
+Actor fetchActorByFirstNameAndLastName(String firstName, String lastName) {
+    return dslContext.selectFrom(ACTOR)
+            .where(ACTOR.FIRST_NAME.eq(firstName).and(ACTOR.LAST_NAME.eq(lastName)))
+            .fetch();
+}
+
+// 또는 
+Actor fetchActorByFirstNameAndLastName(String firstName, String lastName) {
+    return dslContext.selectFrom(ACTOR)
+            .where(
+                    ACTOR.FIRST_NAME.eq(firstName),
+                    ACTOR.LAST_NAME.eq(lastName)
+            ).fetch();
+}
+```
+
+```mysql
+select `actor`.`actor_id`, 
+       `actor`.`first_name`,
+       `actor`.`last_name`,
+       `actor`.`last_update` 
+from `actor` 
+where (`actor`.`first_name` = ? and `actor`.`last_name` = ?)
+```
+
+#### 1.2 OR 절
+```java
+public List<Actor> fetchActorByFirstNameOrLastName(String firstName, String lastName) {
+    return dslContext.selectFrom(ACTOR)
+            .where(
+                    ACTOR.FIRST_NAME.eq(firstName)
+                            .or(ACTOR.LAST_NAME.eq(lastName))
+            )
+            .fetchInto(Actor.class);
+}
+```
+
+```mysql
+select `actor`.`actor_id`, 
+       `actor`.`first_name`,
+       `actor`.`last_name`,
+       `actor`.`last_update`
+from `actor`
+where (`actor`.`first_name` = ? or `actor`.`last_name` = ?)
+```
+
+### 2. Dynamic Condition 만들기
+
+조건절에서 DSL.noCondition()을 사용하여 조건이 없는 경우 조건절에서 제외할 수 있음.
+
+```java
+import org.jooq.Condition;
+import org.jooq.Field;
+import org.jooq.impl.DSL;
+
+public static <T> Condition eqIfNotNull(Field<T> field, T value) {
+    if (value == null) {
+        return DSL.noCondition();
+    }
+    return field.eq(value);
+}
+```
+
+### 3. in 절 동적조건절 만들기
+```java
+public class JooqListConditionUtils {
+    public static <T> Condition inIfNotEmpty(Field<T> field, List<T> values) {
+        if (CollectionUtils.isEmpty(values)) {
+            return DSL.noCondition();
+        }
+        return field.in(values);
+    }
+}
+```
 
 ```java
 @Repository
-public class FilmRepositoryIsA extends FilmDao {
+public class ActorRepository {
+    // ... 
 
-    private final DSLContext dslContext;
-    private final JFilm FILM = JFilm.FILM;
-
-    public FilmRepositoryIsA(Configuration configuration, DSLContext dslContext) {
-        super(configuration);
-        this.dslContext = dslContext;
+    public List<Actor> findByActorIdIn(List<Long> actorIdList) {
+        return dslContext.selectFrom(ACTOR)
+                .where(inIfNotEmpty(ACTOR.ACTOR_ID, actorIdList))
+                .fetchInto(Actor.class);
     }
 }
 ```
-
-### step 3. 컴포지션 관계로 DAO 사용
-
-```java
-@Repository
-public class FilmRepositoryHasA {
-
-    private final FilmDao dao;
-    private final DSLContext dslContext;
-    private final JFilm FILM = JFilm.FILM;
-
-    public FilmRepositoryHasA(Configuration configuration, DSLContext dslContext) {
-        this.dao = new FilmDao(configuration);
-        this.dslContext = dslContext;
-    }
-}
-```
-
-### step 4. 테스트 코드로 동작확인
-
-```java
-@SpringBootTest
-public class JooqDaoWrapperTest {
-
-    @Autowired
-    FilmRepositoryIsA filmRepositoryIsA;
-
-    @Autowired
-    FilmRepositoryHasA filmRepositoryHasA;
-
-    @Test
-    @DisplayName(""" 
-            상속) 자동생성 DAO 사용
-               - 영화 길이가 100 ~ 180 분 사이인 영화 조회
-            """)
-    void 상속_DAO_1() {
-        // given
-        var start = 100;
-        var end = 180;
-
-        // when
-        List<Film> films = filmRepositoryIsA.fetchRangeOfJLength(start, end);
-
-        // then
-        assertThat(films).allSatisfy(film ->
-                assertThat(film.getLength()).isBetween(start, end)
-        );
-    }
-
-    @Test
-    @DisplayName(""" 
-            컴포지션) 자동생성 DAO 사용
-               - 영화 길이가 100 ~ 180 분 사이인 영화 조회
-            """)
-    void 컴포지션_DAO_1() {
-        // given
-        var start = 100;
-        var end = 180;
-
-        // when
-        List<Film> films = filmRepositoryHasA.fetchRangeOfLength(start, end);
-
-        // then
-        assertThat(films).allSatisfy(film ->
-                assertThat(film.getLength()).isBetween(start, end)
-        );
-    }
-}
-```
-
-### 별첨. generated DAO에서 필드에 jPrefix 가 붙는 이슈
-https://github.com/jOOQ/jOOQ/issues/15926 (3.20에서 해결 후 릴리즈 예정)
