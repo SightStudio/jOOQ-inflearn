@@ -1,13 +1,11 @@
 package org.sight.jooqstart.config.converter;
 
 import org.jooq.impl.EnumConverter;
-import org.sight.jooqstart.film.FilmSummary;
+import org.sight.jooqstart.film.FilmPriceSummary;
 
-import java.util.function.Function;
-
-public class PriceCategoryConverter extends EnumConverter<String, FilmSummary.PriceCategory>{
+public class PriceCategoryConverter extends EnumConverter<String, FilmPriceSummary.PriceCategory>{
 
     public PriceCategoryConverter() {
-        super(String.class, FilmSummary.PriceCategory.class, FilmSummary.PriceCategory::getCode);
+        super(String.class, FilmPriceSummary.PriceCategory.class, FilmPriceSummary.PriceCategory::getCode);
     }
 }

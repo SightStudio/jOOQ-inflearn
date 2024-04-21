@@ -40,8 +40,7 @@ ORDER BY rental_duration_info.average_rental_duration DESC;
 대여된 기록이 있는 영화가 있는 영화만 조회한다.
 ```mysql
 SELECT
-  film.film_id,
-  film.title
+  film.*
 FROM
   film
 WHERE EXISTS (

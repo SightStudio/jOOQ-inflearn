@@ -3,11 +3,11 @@ package org.sight.jooqstart.film;
 import lombok.Getter;
 
 @Getter
-public class FilmSummary {
+public class FilmPriceSummary {
 
     private Long filmId;
     private String title;
-    private PriceCategory price_category;
+    private PriceCategory priceCategory;
 
     @Getter
     public enum PriceCategory {
