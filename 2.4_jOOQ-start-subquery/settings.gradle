@@ -1,0 +1,2 @@
+rootProject.name = 'jOOQ-start-subquery'
+include 'jooq-custom'
