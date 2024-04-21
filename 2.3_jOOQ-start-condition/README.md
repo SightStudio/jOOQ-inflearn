@@ -3,22 +3,30 @@
 ### 1. AND 절과 OR 절
 
 #### 1.1 AND 절
+
 ```java
-private final DSLContext dslContext;
+@Repository
+@RequiredArgsConstructor
+public class ActorRepository {
+    
+    private final DSLContext dslContext;
+    
+    // ...
+    
+    Actor fetchActorByFirstNameAndLastName(String firstName, String lastName) {
+        return dslContext.selectFrom(ACTOR)
+                .where(ACTOR.FIRST_NAME.eq(firstName).and(ACTOR.LAST_NAME.eq(lastName)))
+                .fetch();
+    }
 
-Actor fetchActorByFirstNameAndLastName(String firstName, String lastName) {
-    return dslContext.selectFrom(ACTOR)
-            .where(ACTOR.FIRST_NAME.eq(firstName).and(ACTOR.LAST_NAME.eq(lastName)))
-            .fetch();
-}
-
-// 또는 
-Actor fetchActorByFirstNameAndLastName(String firstName, String lastName) {
-    return dslContext.selectFrom(ACTOR)
-            .where(
-                    ACTOR.FIRST_NAME.eq(firstName),
-                    ACTOR.LAST_NAME.eq(lastName)
-            ).fetch();
+    // 또는 
+    Actor fetchActorByFirstNameAndLastName(String firstName, String lastName) {
+        return dslContext.selectFrom(ACTOR)
+                .where(
+                        ACTOR.FIRST_NAME.eq(firstName),
+                        ACTOR.LAST_NAME.eq(lastName)
+                ).fetch();
+    }   
 }
 ```
 
@@ -33,13 +41,21 @@ where (`actor`.`first_name` = ? and `actor`.`last_name` = ?)
 
 #### 1.2 OR 절
 ```java
-public List<Actor> fetchActorByFirstNameOrLastName(String firstName, String lastName) {
-    return dslContext.selectFrom(ACTOR)
-            .where(
-                    ACTOR.FIRST_NAME.eq(firstName)
-                            .or(ACTOR.LAST_NAME.eq(lastName))
-            )
-            .fetchInto(Actor.class);
+@Repository
+@RequiredArgsConstructor
+public class ActorRepository {
+
+    private final DSLContext dslContext;
+    
+    // ...
+    public List<Actor> fetchActorByFirstNameOrLastName(String firstName, String lastName) {
+        return dslContext.selectFrom(ACTOR)
+                .where(
+                        ACTOR.FIRST_NAME.eq(firstName)
+                                .or(ACTOR.LAST_NAME.eq(lastName))
+                )
+                .fetchInto(Actor.class);
+    }
 }
 ```
 
@@ -61,11 +77,13 @@ import org.jooq.Condition;
 import org.jooq.Field;
 import org.jooq.impl.DSL;
 
-public static <T> Condition eqIfNotNull(Field<T> field, T value) {
-    if (value == null) {
-        return DSL.noCondition();
+public class JooqConditionUtils {
+    public static <T> Condition eqIfNotNull(Field<T> field, T value) {
+        if (value == null) {
+            return DSL.noCondition();
+        }
+        return field.eq(value);
     }
-    return field.eq(value);
 }
 ```
 
@@ -84,8 +102,10 @@ public class JooqListConditionUtils {
 ```java
 @Repository
 public class ActorRepository {
-    // ... 
 
+    private final DSLContext dslContext;
+
+    // ...
     public List<Actor> findByActorIdIn(List<Long> actorIdList) {
         return dslContext.selectFrom(ACTOR)
                 .where(inIfNotEmpty(ACTOR.ACTOR_ID, actorIdList))
