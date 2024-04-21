@@ -37,4 +37,4 @@ out/
 .vscode/
 
 ### ignore jOOQ generated DSL
-/src/main/generated
+/src/generated
