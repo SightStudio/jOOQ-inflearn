@@ -1,0 +1,2 @@
+rootProject.name = 'jOOQ-start-subquery_using_enum_converter'
+include 'jooq-custom'
