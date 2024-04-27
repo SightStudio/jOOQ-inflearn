@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 
 @SpringBootTest
-public class JooqCudTest {
+public class JooqInsertTest {
 
     @Autowired
     ActorRepository actorRepository;
