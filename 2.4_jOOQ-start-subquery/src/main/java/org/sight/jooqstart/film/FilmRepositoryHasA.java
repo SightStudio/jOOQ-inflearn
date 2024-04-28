@@ -81,17 +81,21 @@ public class FilmRepositoryHasA {
      *       ELSE 'Expensive'
      *     END AS price_category,
      *     (SELECT COUNT(*) FROM inventory where film_id = film.film_id) AS total_inventory
-     * FROM FILM;
+     * FROM film;
+     * WHERE film.title like '%EGG%'
      * </pre>
      */
     public List<FilmPriceSummary> findFilmPriceSummaryByFilmTitleLike(String filmTitle) {
+        final JInventory INVENTORY = JInventory.INVENTORY;
         return dslContext.select(
                         FILM.FILM_ID,
                         FILM.TITLE,
                         FILM.RENTAL_RATE,
-                        case_().when(FILM.RENTAL_RATE.le(BigDecimal.valueOf(1.0)), "Cheap")
+                        case_()
+                                .when(FILM.RENTAL_RATE.le(BigDecimal.valueOf(1.0)), "Cheap")
                                 .when(FILM.RENTAL_RATE.le(BigDecimal.valueOf(3.0)), "Moderate")
-                                .otherwise("Expensive").as("price_category")
+                                .otherwise("Expensive").as("price_category"),
+                        selectCount().from(INVENTORY).where(INVENTORY.FILM_ID.eq(FILM.FILM_ID)).asField("total_inventory")
                 ).from(FILM)
                 .where(containsIfNotBlank(FILM.TITLE, filmTitle))
                 .fetchInto(FilmPriceSummary.class);

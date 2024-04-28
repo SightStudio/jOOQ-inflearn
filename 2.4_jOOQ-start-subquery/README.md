@@ -61,13 +61,16 @@ public class FilmRepositoryHasA {
     private DSLContext dslContext;
     // ...
     public List<FilmPriceSummary> findFilmPriceSummaryByFilmTitleLike(String filmTitle) {
+        final JInventory INVENTORY = JInventory.INVENTORY;
         return dslContext.select(
                         FILM.FILM_ID,
                         FILM.TITLE,
                         FILM.RENTAL_RATE,
-                        case_().when(FILM.RENTAL_RATE.le(BigDecimal.valueOf(1.0)), "Cheap")
+                        case_()
+                                .when(FILM.RENTAL_RATE.le(BigDecimal.valueOf(1.0)), "Cheap")
                                 .when(FILM.RENTAL_RATE.le(BigDecimal.valueOf(3.0)), "Moderate")
-                                .otherwise("Expensive").as("price_category")
+                                .otherwise("Expensive").as("price_category"),
+                        DSL.selectCount().from(INVENTORY).where(INVENTORY.FILM_ID.eq(FILM.FILM_ID)).asField("total_inventory")
                 ).from(FILM)
                 .where(containsIfNotBlank(FILM.TITLE, filmTitle))
                 .fetchInto(FilmPriceSummary.class);
