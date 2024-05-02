@@ -1,4 +1,4 @@
-# 섹션 2-6. jOOQ로 데이터 생성하기 insert
+# 섹션 2-6. jOOQ로 데이터 수정 / 삭제하기 (update, delete)
 
 ### 1. 자동생성된 DAO를 통한 insert
 
