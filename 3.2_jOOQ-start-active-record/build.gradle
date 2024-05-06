@@ -37,6 +37,7 @@ dependencies {
 	jooqGenerator "org.jooq:jooq:${jooqVersion}"
 	jooqGenerator "org.jooq:jooq-meta:${jooqVersion}"
 
+	implementation 'jakarta.transaction:jakarta.transaction-api:2.0.1'
 	implementation 'org.springframework.boot:spring-boot-starter'
 	implementation ('org.springframework.boot:spring-boot-starter-jooq') {
 		exclude group: 'org.jooq'

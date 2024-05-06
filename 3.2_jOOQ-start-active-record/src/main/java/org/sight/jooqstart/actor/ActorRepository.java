@@ -10,6 +10,7 @@ import org.jooq.generated.tables.pojos.Actor;
 import org.jooq.generated.tables.pojos.Film;
 import org.jooq.generated.tables.records.ActorRecord;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
@@ -130,6 +131,7 @@ public class ActorRepository {
                 .fetchOneInto(Long.class);
     }
 
+    @Transactional
     public void bulkInsertWithRows(List<Actor> actorList) {
         var rows = actorList.stream()
                 .map(actor -> row(

@@ -1,5 +1,6 @@
 package org.sight.jooqstart;
 
+import jakarta.transaction.Transactional;
 import org.assertj.core.api.Assertions;
 import org.jooq.generated.tables.pojos.Film;
 import org.junit.jupiter.api.DisplayName;
@@ -32,6 +33,7 @@ public class JooqCustomPracticeTest {
 
     @Test
     @DisplayName("2) 영화정보 간략 조회")
+    @Transactional
     void test2() {
         SimpleFilmInfo simpleFilmInfo = filmService.getSimpleFilmInfo(1L);
         Assertions.assertThat(simpleFilmInfo).hasNoNullFieldsOrProperties();
