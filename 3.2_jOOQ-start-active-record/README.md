@@ -1,13 +1,8 @@
-# 섹션 3-2. 트랜잭션과 @Transactional, 그리고 spring-start-jOOQ
+# 섹션 3-2. ActiveRecord 패턴을 활용하여 데이터 조작하기
 
 - Docs
-  - update: https://www.jooq.org/doc/latest/manual/sql-building/sql-statements/update-statement
-  - delete: https://www.jooq.org/doc/latest/manual/sql-building/sql-statements/delete-statement/
+  - Simple Crud: https://www.jooq.org/doc/latest/manual/sql-execution/crud-with-updatablerecords/simple-crud/
 
-### 1. update 절
-#### 1.1 동적으로 필드 업데이트
-
-```mysql
-set global general_log = ON;
-set global log_output = 'TABLE';
-```
+- ActiveRecord 패턴과 DataMapper 패턴
+  - 마틴파울러 - ActiveRecord [(링크)](https://martinfowler.com/eaaCatalog/activeRecord.html)
+  - 마틴파울러 - Data Mapper [(링크)](https://martinfowler.com/eaaCatalog/dataMapper.html)

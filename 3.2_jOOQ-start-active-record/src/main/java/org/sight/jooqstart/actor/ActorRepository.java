@@ -165,7 +165,7 @@ public class ActorRepository {
     }
 
     public int updateWithRecord(Long actorId, ActorUpdateRequest request) {
-        var record = dslContext.newRecord(ACTOR);
+        var record = dslContext.fetchOne(ACTOR, ACTOR.ACTOR_ID.eq(actorId));
 
         if (StringUtils.hasText(request.getFirstName())) {
             record.setFirstName(request.getFirstName());
@@ -190,9 +190,12 @@ public class ActorRepository {
                 .execute();
     }
 
-    public int deleteWithActiveRecord(Long actorId) {
-        ActorRecord actorRecord = dslContext.newRecord(ACTOR);
-        actorRecord.setActorId(actorId);
+    public int deleteWithRecord(Long actorId) {
+        var actorRecord = dslContext.fetchOne(ACTOR, ACTOR.ACTOR_ID.eq(actorId));
         return actorRecord.delete();
+    }
+
+    public ActorRecord findRecordByActorId(Long actorId) {
+        return dslContext.fetchOne(ACTOR, ACTOR.ACTOR_ID.eq(actorId));
     }
 }

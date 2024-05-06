@@ -63,7 +63,7 @@ public class JooqUpdateTest {
 
     @Test
     @Transactional
-    @DisplayName("일부 필드만 update - DTO 활용")
+    @DisplayName("일부 필드만 update - record 활용")
     void 업데이트_일부_필드만_with_record() {
 
         // given

@@ -1,6 +1,5 @@
 package org.sight.jooqstart;
 
-import jakarta.transaction.Transactional;
 import org.assertj.core.api.Assertions;
 import org.jooq.generated.tables.pojos.Film;
 import org.junit.jupiter.api.DisplayName;
@@ -12,6 +11,7 @@ import org.sight.jooqstart.film.SimpleFilmInfo;
 import org.sight.jooqstart.web.response.FilmWithActorPagedResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 

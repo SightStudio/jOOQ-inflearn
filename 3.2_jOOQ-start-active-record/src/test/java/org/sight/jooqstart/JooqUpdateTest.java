@@ -98,10 +98,10 @@ public class JooqUpdateTest {
         Long newActorId = actorRepository.saveWithReturningPkOnly(newActor);
 
         // when
-        int delete = actorRepository.delete(newActorId);
+        int result = actorRepository.delete(newActorId);
 
         // then
-        Assertions.assertThat(delete)
+        Assertions.assertThat(result)
                 .isEqualTo(1);
     }
 
@@ -118,10 +118,10 @@ public class JooqUpdateTest {
         Long newActorId = actorRepository.saveWithReturningPkOnly(newActor);
 
         // when
-        int delete = actorRepository.deleteWithActiveRecord(newActorId);
+        int result = actorRepository.deleteWithRecord(newActorId);
 
         // then
-        Assertions.assertThat(delete)
+        Assertions.assertThat(result)
                 .isEqualTo(1);
     }
 }
