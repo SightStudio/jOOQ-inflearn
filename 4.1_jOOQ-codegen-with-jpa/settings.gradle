@@ -1,0 +1,5 @@
+rootProject.name = 'jOOQ-codegen-with-jpa'
+include 'jooq-custom'
+include 'entity'
+include 'application'
+

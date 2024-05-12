@@ -1,0 +1,103 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.2.3'
+    id 'io.spring.dependency-management' version '1.1.4'
+    id 'nu.studer.jooq' version '9.0'
+}
+
+group = 'org.sight'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    sourceCompatibility = '17'
+}
+
+repositories {
+    mavenCentral()
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ["src/main/java", "src/generated"]
+        }
+    }
+}
+
+dependencies {
+    implementation "org.jooq:jooq:${jooqVersion}"
+
+    jooqGenerator project(':jooq-custom')
+    jooqGenerator "org.jooq:jooq:${jooqVersion}"
+    jooqGenerator "org.jooq:jooq-meta:${jooqVersion}"
+
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation ('org.springframework.boot:spring-boot-starter-jooq') {
+        exclude group: 'org.jooq'
+    }
+
+    runtimeOnly 'com.mysql:mysql-connector-j'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+
+    // codegen 시점에 entity 포함
+    jooqGenerator project(':entity')
+
+    // 만약 application 모듈에서 엔티티 모듈을 사용하고 싶다면 주석 해제
+    // implementation project(':entity')
+
+    jooqGenerator "org.jooq:jooq-meta-extensions-hibernate:${jooqVersion}"
+
+    // in-memory H2로 JOOQ dsl 생성을 위함
+    // h2의 v2 버전 호환성 때문에 상위버전 대신 1.4.200 버전을 추천
+    jooqGenerator 'com.h2database:h2:1.4.200'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+jooq {
+    version = "${jooqVersion}"
+    configurations {
+        sakilaDB {
+            generationTool {
+                generator {
+                    database {
+                        name = 'org.jooq.meta.extensions.jpa.JPADatabase'
+                        properties {
+                            property {
+                                key = 'packages'
+                                value = 'com.sight.entity'
+                            }
+
+                            // DSL 생성시, jpa의 AttributeConverters 에 따라 jooq DSL의 타입을 매핑할지 여부
+                            property {
+                                key = 'useAttributeConverters'
+                                value = true
+                            }
+                        }
+                    }
+
+                    generate {
+                        daos = true
+                        deprecated = false
+                        records = true
+                        fluentSetters = true
+                        javaTimeTypes = true
+                    }
+
+                    target {
+                        directory = 'src/generated'
+                    }
+
+                    strategy.name = 'jooq.custom.generator.JPrefixGeneratorStrategy'
+                }
+            }
+        }
+    }
+}
