@@ -54,7 +54,7 @@ dependencies {
 	jooqGenerator project(':entity')
 
 	// 만약 application 모듈에서 엔티티 모듈을 사용하고 싶다면 주석 해제
-	// implementation project(':entity')
+	implementation project(':entity')
 
 	jooqGenerator "org.jooq:jooq-meta-extensions-hibernate:${jooqVersion}"
 
