@@ -1,2 +1,0 @@
-rootProject.name = 'gradle-testcontainer-flyway'
-include 'jooq-custom'
