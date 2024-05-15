@@ -1,5 +1,9 @@
 # 섹션 4-2. Testcontainers + Flyway를 통해 DDL로 jOOQ DSL 만들기
 
+이전 4.2강과 동일하지만 DDL이 나뉘어져있음
+
+```src/resources/db/migration``` 폴더 확인
+
 ### 1. jOOQ plugin 교체
 
 nu.studer.jooq -> dev.monosoul.jooq-docker로 교체
@@ -83,4 +87,4 @@ tasks {
 flyway에 사용될 파일은 ```V{버전 번호}__{name}.sql``` 형식이 되어야한다.
 V1__init_tables.sql 이라는 파일로 추가
 
-### gradle -> jooq > generateJooqClasses 테스크 실행
+### 4. gradle -> jooq > generateJooqClasses 테스크 실행

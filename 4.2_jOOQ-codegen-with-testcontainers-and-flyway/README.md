@@ -83,4 +83,4 @@ tasks {
 flyway에 사용될 파일은 ```V{버전 번호}__{name}.sql``` 형식이 되어야한다.
 V1__init_tables.sql 이라는 파일로 추가
 
-### gradle -> jooq > generateJooqClasses 테스크 실행
+### 4. gradle -> jooq > generateJooqClasses 테스크 실행
