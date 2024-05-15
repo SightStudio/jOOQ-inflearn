@@ -19,7 +19,8 @@ import java.time.Instant;
 })
 public class Rental {
     @Id
-    @Column(name = "rental_id", nullable = false)
+    @Column(name = "rental_id")
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "rental_date", nullable = false)

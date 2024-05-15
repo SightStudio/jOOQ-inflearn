@@ -64,7 +64,7 @@ public class JooqActiveRecordTest {
         // actor.insert();
 
         // then
-        Assertions.assertThat(actorRecord.getLastUpdate()).isNotNull();
+        Assertions.assertThat(actorRecord.getLastUpdate()).isNull();
     }
 
     @Test

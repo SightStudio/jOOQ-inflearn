@@ -3,7 +3,6 @@ package org.sight.jooqstart;
 import org.jooq.generated.tables.pojos.Film;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
 import org.sight.jooqstart.film.FilmRepositoryHasA;
 import org.sight.jooqstart.film.FilmRepositoryIsA;
 import org.springframework.beans.factory.annotation.Autowired;

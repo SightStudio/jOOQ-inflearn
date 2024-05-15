@@ -17,6 +17,7 @@ import java.time.Instant;
 public class Staff {
     @Id
     @Column(name = "staff_id")
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "first_name", nullable = false, length = 45)

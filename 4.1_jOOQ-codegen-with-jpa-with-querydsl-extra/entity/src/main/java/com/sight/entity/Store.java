@@ -18,6 +18,7 @@ import java.time.Instant;
 public class Store {
     @Id
     @Column(name = "store_id")
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY, optional = false)

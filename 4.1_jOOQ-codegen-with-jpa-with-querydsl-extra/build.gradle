@@ -1,6 +1,7 @@
 buildscript {
 	ext {
 		jooqVersion = '3.19.5'
+		queryDslVersion = '6.3'
 	}
 }
 

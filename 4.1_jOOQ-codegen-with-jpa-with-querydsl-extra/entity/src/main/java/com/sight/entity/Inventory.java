@@ -17,6 +17,7 @@ import java.time.Instant;
 public class Inventory {
     @Id
     @Column(name = "inventory_id")
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

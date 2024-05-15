@@ -13,6 +13,7 @@ import lombok.Setter;
 public class FilmText {
     @Id
     @Column(name = "film_id", nullable = false)
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "title", nullable = false)

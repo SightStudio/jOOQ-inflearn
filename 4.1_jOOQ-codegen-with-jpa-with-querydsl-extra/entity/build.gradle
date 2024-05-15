@@ -27,8 +27,33 @@ dependencies {
 
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
+
+    // queryDSL 의존성
+    implementation "io.github.openfeign.querydsl:querydsl-core:${queryDslVersion}"
+    implementation "io.github.openfeign.querydsl:querydsl-jpa:${queryDslVersion}"
+    annotationProcessor "io.github.openfeign.querydsl:querydsl-apt:${queryDslVersion}"
+    annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+    annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
 }
 
 test {
     useJUnitPlatform()
+}
+
+tasks.withType(JavaCompile) {
+    options.getGeneratedSourceOutputDirectory().set(file('src/generated'))
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ["src/main/java", "src/generated"]
+        }
+    }
 }

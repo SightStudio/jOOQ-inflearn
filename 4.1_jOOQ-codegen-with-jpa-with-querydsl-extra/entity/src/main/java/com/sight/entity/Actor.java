@@ -15,6 +15,7 @@ import java.time.Instant;
 })
 public class Actor {
     @Id
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
     @Column(name = "actor_id")
     private Long id;
 
