@@ -8,39 +8,30 @@ create table actor
 )
     charset = utf8;
 
-create index idx_actor_last_name
-    on actor (last_name);
+create index idx_actor_last_name on actor (last_name);
 
-create table category
-(
-    category_id int unsigned auto_increment
-        primary key,
+create table category (
+    category_id int unsigned auto_increment primary key,
     name        varchar(25)                         not null,
     last_update timestamp default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP
-)
-    charset = utf8;
+) charset = utf8;
 
-create table country
-(
+create table country (
     country_id  int unsigned auto_increment
         primary key,
     country     varchar(50)                         not null,
     last_update timestamp default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP
-)
-    charset = utf8;
+) charset = utf8;
 
-create table city
-(
-    city_id     int unsigned auto_increment
-        primary key,
+create table city (
+    city_id     int unsigned auto_increment primary key,
     city        varchar(50)                         not null,
     country_id  int unsigned                        not null,
     last_update timestamp default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP,
     constraint fk_city_country
         foreign key (country_id) references country (country_id)
             on update cascade
-)
-    charset = utf8;
+) charset = utf8;
 
 create table address
 (

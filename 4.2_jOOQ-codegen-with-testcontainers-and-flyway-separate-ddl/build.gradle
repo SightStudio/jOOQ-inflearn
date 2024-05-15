@@ -1,25 +1,37 @@
-# 섹션 4-2. Testcontainers + Flyway를 통해 DDL로 jOOQ DSL 만들기
-
-### 1. jOOQ plugin 교체
-
-nu.studer.jooq -> dev.monosoul.jooq-docker로 교체
-
-### 2. build.gradle 수정
-```groovy
-dependencies {
-    // ...
-    jooqCodegen project(':jooq-custom')
-    jooqCodegen "org.jooq:jooq:${jooqVersion}"
-    jooqCodegen "org.jooq:jooq-meta:${jooqVersion}"
-    jooqCodegen "org.jooq:jooq-codegen:${jooqVersion}"
-    
-    jooqCodegen 'org.flywaydb:flyway-core:10.8.1'
-    jooqCodegen 'org.flywaydb:flyway-mysql:10.8.1'
-}
-```
-
-```groovy
 import org.jooq.meta.jaxb.*
+
+buildscript {
+    ext {
+        jooqVersion = '3.19.5'
+    }
+}
+
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.2.3'
+    id 'io.spring.dependency-management' version '1.1.4'
+    id 'dev.monosoul.jooq-docker' version '6.0.14'
+}
+
+group = 'org.sight'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    sourceCompatibility = '17'
+}
+
+repositories {
+    mavenCentral()
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ["src/main/java", "src/generated"]
+        }
+    }
+}
+
 
 jooq {
     version = "${jooqVersion}"
@@ -27,8 +39,8 @@ jooq {
         image {
             name = "mysql:8.0.29"
             envVars = [
-                MYSQL_ROOT_PASSWORD: "passwd",
-                MYSQL_DATABASE     : "sakila"
+                    MYSQL_ROOT_PASSWORD: "passwd",
+                    MYSQL_DATABASE     : "sakila"
             ]
         }
 
@@ -77,10 +89,32 @@ tasks {
         }
     }
 }
-```
 
-### 3. src/db/migration 폴더에 flyway 파일 추가
-flyway에 사용될 파일은 ```V{버전 번호}__{name}.sql``` 형식이 되어야한다.
-V1__init_tables.sql 이라는 파일로 추가
+dependencies {
+    implementation "org.jooq:jooq:${jooqVersion}"
 
-### gradle -> jooq > generateJooqClasses 테스크 실행
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation('org.springframework.boot:spring-boot-starter-jooq') {
+        exclude group: 'org.jooq'
+    }
+
+    runtimeOnly 'com.mysql:mysql-connector-j'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+
+    jooqCodegen project(':jooq-custom')
+    jooqCodegen "org.jooq:jooq:${jooqVersion}"
+    jooqCodegen "org.jooq:jooq-meta:${jooqVersion}"
+    jooqCodegen "org.jooq:jooq-codegen:${jooqVersion}"
+
+    jooqCodegen 'org.flywaydb:flyway-core:10.8.1'
+    jooqCodegen 'org.flywaydb:flyway-mysql:10.8.1'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}

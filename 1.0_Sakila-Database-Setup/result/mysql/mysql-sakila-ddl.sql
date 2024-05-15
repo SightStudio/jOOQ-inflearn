@@ -1,4 +1,4 @@
-create table sakila.actor
+create table actor
 (
     actor_id    int unsigned auto_increment
         primary key,
@@ -9,9 +9,9 @@ create table sakila.actor
     charset = utf8;
 
 create index idx_actor_last_name
-    on sakila.actor (last_name);
+    on actor (last_name);
 
-create table sakila.category
+create table category
 (
     category_id int unsigned auto_increment primary key,
     name        varchar(25)                         not null,
@@ -19,7 +19,7 @@ create table sakila.category
 )
     charset = utf8;
 
-create table sakila.country
+create table country
 (
     country_id  int unsigned auto_increment
         primary key,
@@ -28,7 +28,7 @@ create table sakila.country
 )
     charset = utf8;
 
-create table sakila.city
+create table city
 (
     city_id     int unsigned auto_increment
         primary key,
@@ -36,12 +36,12 @@ create table sakila.city
     country_id  int unsigned                        not null,
     last_update timestamp default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP,
     constraint fk_city_country
-        foreign key (country_id) references sakila.country (country_id)
+        foreign key (country_id) references country (country_id)
             on update cascade
 )
     charset = utf8;
 
-create table sakila.address
+create table address
 (
     address_id  int unsigned auto_increment
         primary key,
@@ -53,18 +53,18 @@ create table sakila.address
     phone       varchar(20)                         not null,
     last_update timestamp default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP,
     constraint fk_address_city
-        foreign key (city_id) references sakila.city (city_id)
+        foreign key (city_id) references city (city_id)
             on update cascade
 )
     charset = utf8;
 
 create index idx_fk_city_id
-    on sakila.address (city_id);
+    on address (city_id);
 
 create index idx_fk_country_id
-    on sakila.city (country_id);
+    on city (country_id);
 
-create table sakila.film_text
+create table film_text
 (
     film_id     int          not null
         primary key,
@@ -75,9 +75,9 @@ create table sakila.film_text
     charset = utf8;
 
 create fulltext index idx_title_description
-    on sakila.film_text (title, description);
+    on film_text (title, description);
 
-create table sakila.language
+create table language
 (
     language_id int unsigned auto_increment
         primary key,
@@ -86,7 +86,7 @@ create table sakila.language
 )
     charset = utf8;
 
-create table sakila.film
+create table film
 (
     film_id              int unsigned auto_increment
         primary key,
@@ -103,57 +103,57 @@ create table sakila.film
     special_features     set ('Trailers', 'Commentaries', 'Deleted Scenes', 'Behind the Scenes') null,
     last_update          timestamp                               default CURRENT_TIMESTAMP       not null on update CURRENT_TIMESTAMP,
     constraint fk_film_language
-        foreign key (language_id) references sakila.language (language_id)
+        foreign key (language_id) references language (language_id)
             on update cascade,
     constraint fk_film_language_original
-        foreign key (original_language_id) references sakila.language (language_id)
+        foreign key (original_language_id) references language (language_id)
             on update cascade
 )
     charset = utf8;
 
 create index idx_fk_language_id
-    on sakila.film (language_id);
+    on film (language_id);
 
 create index idx_fk_original_language_id
-    on sakila.film (original_language_id);
+    on film (original_language_id);
 
 create index idx_title
-    on sakila.film (title);
+    on film (title);
 
-create table sakila.film_actor
+create table film_actor
 (
     actor_id    int unsigned                        not null,
     film_id     int unsigned                        not null,
     last_update timestamp default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP,
     primary key (actor_id, film_id),
     constraint fk_film_actor_actor
-        foreign key (actor_id) references sakila.actor (actor_id)
+        foreign key (actor_id) references actor (actor_id)
             on update cascade,
     constraint fk_film_actor_film
-        foreign key (film_id) references sakila.film (film_id)
+        foreign key (film_id) references film (film_id)
             on update cascade
 )
     charset = utf8;
 
 create index idx_fk_film_id
-    on sakila.film_actor (film_id);
+    on film_actor (film_id);
 
-create table sakila.film_category
+create table film_category
 (
     film_id     int unsigned                        not null,
     category_id int unsigned                        not null,
     last_update timestamp default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP,
     primary key (film_id, category_id),
     constraint fk_film_category_category
-        foreign key (category_id) references sakila.category (category_id)
+        foreign key (category_id) references category (category_id)
             on update cascade,
     constraint fk_film_category_film
-        foreign key (film_id) references sakila.film (film_id)
+        foreign key (film_id) references film (film_id)
             on update cascade
 )
     charset = utf8;
 
-create table sakila.staff
+create table staff
 (
     staff_id    int unsigned auto_increment
         primary key,
@@ -168,18 +168,18 @@ create table sakila.staff
     password    varchar(40) collate utf8_bin         null,
     last_update timestamp  default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP,
     constraint fk_staff_address
-        foreign key (address_id) references sakila.address (address_id)
+        foreign key (address_id) references address (address_id)
             on update cascade
 )
     charset = utf8;
 
 create index idx_fk_address_id
-    on sakila.staff (address_id);
+    on staff (address_id);
 
 create index idx_fk_store_id
-    on sakila.staff (store_id);
+    on staff (store_id);
 
-create table sakila.store
+create table store
 (
     store_id         int unsigned auto_increment
         primary key,
@@ -189,15 +189,15 @@ create table sakila.store
     constraint idx_unique_manager
         unique (manager_staff_id),
     constraint fk_store_address
-        foreign key (address_id) references sakila.address (address_id)
+        foreign key (address_id) references address (address_id)
             on update cascade,
     constraint fk_store_staff
-        foreign key (manager_staff_id) references sakila.staff (staff_id)
+        foreign key (manager_staff_id) references staff (staff_id)
             on update cascade
 )
     charset = utf8;
 
-create table sakila.customer
+create table customer
 (
     customer_id int unsigned auto_increment
         primary key,
@@ -210,24 +210,24 @@ create table sakila.customer
     create_date datetime                             not null,
     last_update timestamp  default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP,
     constraint fk_customer_address
-        foreign key (address_id) references sakila.address (address_id)
+        foreign key (address_id) references address (address_id)
             on update cascade,
     constraint fk_customer_store
-        foreign key (store_id) references sakila.store (store_id)
+        foreign key (store_id) references store (store_id)
             on update cascade
 )
     charset = utf8;
 
 create index idx_fk_address_id
-    on sakila.customer (address_id);
+    on customer (address_id);
 
 create index idx_fk_store_id
-    on sakila.customer (store_id);
+    on customer (store_id);
 
 create index idx_last_name
-    on sakila.customer (last_name);
+    on customer (last_name);
 
-create table sakila.inventory
+create table inventory
 (
     inventory_id int unsigned auto_increment
         primary key,
@@ -235,21 +235,21 @@ create table sakila.inventory
     store_id     int unsigned                        not null,
     last_update  timestamp default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP,
     constraint fk_inventory_film
-        foreign key (film_id) references sakila.film (film_id)
+        foreign key (film_id) references film (film_id)
             on update cascade,
     constraint fk_inventory_store
-        foreign key (store_id) references sakila.store (store_id)
+        foreign key (store_id) references store (store_id)
             on update cascade
 )
     charset = utf8;
 
 create index idx_fk_film_id
-    on sakila.inventory (film_id);
+    on inventory (film_id);
 
 create index idx_store_id_film_id
-    on sakila.inventory (store_id, film_id);
+    on inventory (store_id, film_id);
 
-create table sakila.rental
+create table rental
 (
     rental_id    int auto_increment
         primary key,
@@ -262,18 +262,18 @@ create table sakila.rental
     constraint rental_date
         unique (rental_date, inventory_id, customer_id),
     constraint fk_rental_customer
-        foreign key (customer_id) references sakila.customer (customer_id)
+        foreign key (customer_id) references customer (customer_id)
             on update cascade,
     constraint fk_rental_inventory
-        foreign key (inventory_id) references sakila.inventory (inventory_id)
+        foreign key (inventory_id) references inventory (inventory_id)
             on update cascade,
     constraint fk_rental_staff
-        foreign key (staff_id) references sakila.staff (staff_id)
+        foreign key (staff_id) references staff (staff_id)
             on update cascade
 )
     charset = utf8;
 
-create table sakila.payment
+create table payment
 (
     payment_id   int unsigned auto_increment
         primary key,
@@ -284,37 +284,37 @@ create table sakila.payment
     payment_date datetime                            not null,
     last_update  timestamp default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP,
     constraint fk_payment_customer
-        foreign key (customer_id) references sakila.customer (customer_id)
+        foreign key (customer_id) references customer (customer_id)
             on update cascade,
     constraint fk_payment_rental
-        foreign key (rental_id) references sakila.rental (rental_id)
+        foreign key (rental_id) references rental (rental_id)
             on update cascade on delete set null,
     constraint fk_payment_staff
-        foreign key (staff_id) references sakila.staff (staff_id)
+        foreign key (staff_id) references staff (staff_id)
             on update cascade
 )
     charset = utf8;
 
 create index idx_fk_customer_id
-    on sakila.payment (customer_id);
+    on payment (customer_id);
 
 create index idx_fk_staff_id
-    on sakila.payment (staff_id);
+    on payment (staff_id);
 
 create index idx_fk_customer_id
-    on sakila.rental (customer_id);
+    on rental (customer_id);
 
 create index idx_fk_inventory_id
-    on sakila.rental (inventory_id);
+    on rental (inventory_id);
 
 create index idx_fk_staff_id
-    on sakila.rental (staff_id);
+    on rental (staff_id);
 
-alter table sakila.staff
+alter table staff
     add constraint fk_staff_store
-        foreign key (store_id) references sakila.store (store_id)
+        foreign key (store_id) references store (store_id)
             on update cascade;
 
 create index idx_fk_address_id
-    on sakila.store (address_id);
+    on store (address_id);
 
