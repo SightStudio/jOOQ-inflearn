@@ -24,15 +24,6 @@ repositories {
     mavenCentral()
 }
 
-sourceSets {
-    main {
-        java {
-            srcDirs = ["src/main/java", "src/generated"]
-        }
-    }
-}
-
-
 jooq {
     version = "${jooqVersion}"
     withContainer {
@@ -114,6 +105,15 @@ dependencies {
     jooqCodegen 'org.flywaydb:flyway-core:10.8.1'
     jooqCodegen 'org.flywaydb:flyway-mysql:10.8.1'
 }
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ["src/main/java", "src/generated"]
+        }
+    }
+}
+
 
 tasks.named('test') {
     useJUnitPlatform()

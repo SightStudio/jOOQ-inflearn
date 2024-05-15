@@ -1,4 +1,0 @@
-rootProject.name = 'jOOQ-codegen-with-jpa-with-querydsl'
-include 'jooq-custom'
-include 'entity'
-
