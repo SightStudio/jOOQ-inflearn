@@ -21,8 +21,8 @@ public class PerformanceListener implements ExecuteListener {
 
     @Override
     public void executeEnd(ExecuteContext ctx) {
-
         final long queryTimeNano = watch.split();
+
         if (queryTimeNano > SLOW_QUERY_LIMIT.toNanos()) {
             Query query = ctx.query();
             Duration executeTime = Duration.ofNanos(queryTimeNano);
@@ -31,7 +31,7 @@ public class PerformanceListener implements ExecuteListener {
                             """
                             ### Slow SQL 탐지 >>
                             경고: jOOQ로 실행된 쿼리 중 %d초 이상 실행된 쿼리가 있습니다.
-                            실행시간: %f초
+                            실행시간: %s초
                             실행쿼리: %s
                             """
                             , SLOW_QUERY_LIMIT.toSeconds()
@@ -42,7 +42,7 @@ public class PerformanceListener implements ExecuteListener {
         }
     }
 
-    private double millisToSeconds(Duration duration) {
-        return duration.toMillis() / 1000.0;
+    private String millisToSeconds(Duration duration) {
+        return String.format("%.1f", duration.toMillis() / 1000.0);
     }
 }
