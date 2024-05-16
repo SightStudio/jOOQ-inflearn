@@ -1,0 +1,2 @@
+rootProject.name = 'jOOQ-implicit-join-and-explicit-join'
+include 'jooq-custom'
