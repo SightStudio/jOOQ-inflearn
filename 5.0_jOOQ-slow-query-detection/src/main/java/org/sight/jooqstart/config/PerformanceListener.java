@@ -10,12 +10,9 @@ import java.time.Duration;
 
 @Slf4j
 public class PerformanceListener implements ExecuteListener {
-    private long startTime;
 
-    StopWatch watch;
-
-    static class SQLPerformanceWarning extends Exception {
-    }
+    private StopWatch watch;
+    private static final Duration SLOW_QUERY_LIMIT = Duration.ofSeconds(3);
 
     @Override
     public void executeStart(ExecuteContext ctx) {
@@ -24,18 +21,28 @@ public class PerformanceListener implements ExecuteListener {
 
     @Override
     public void executeEnd(ExecuteContext ctx) {
-        int slowQuerySecond = 3;
-        Duration slowQueryLimit = Duration.ofSeconds(slowQuerySecond);
-        if (watch.split() > slowQueryLimit.getNano()) {
-            Query query = ctx.query();
 
+        final long queryTimeNano = watch.split();
+        if (queryTimeNano > SLOW_QUERY_LIMIT.toNanos()) {
+            Query query = ctx.query();
+            Duration executeTime = Duration.ofNanos(queryTimeNano);
             log.warn(
-                    "Slow SQL 탐지 >> \n" +
-                            "jOOQ에서 실행된 쿼리 중 "
-                            + slowQuerySecond + "초 이상 실행된 쿼리가 있습니다. --> \n"
-                            + query,
-                    new SQLPerformanceWarning()
+                    String.format(
+                            """
+                            ### Slow SQL 탐지 >>
+                            경고: jOOQ로 실행된 쿼리 중 %d초 이상 실행된 쿼리가 있습니다.
+                            실행시간: %f초
+                            실행쿼리: %s
+                            """
+                            , SLOW_QUERY_LIMIT.toSeconds()
+                            , millisToSeconds(executeTime)
+                            , query
+                    )
             );
         }
+    }
+
+    private double millisToSeconds(Duration duration) {
+        return duration.toMillis() / 1000.0;
     }
 }

@@ -19,7 +19,7 @@ public class JooqSlowQueryTest {
     @Test
     @DisplayName("SLOW 쿼리 탐지테스트")
     void 슬로우쿼리_탐지_테스트() {
-        dslContext.select(DSL.field("SLEEP(3)"))
+        dslContext.select(DSL.field("SLEEP(4)"))
                 .from(dual())
                 .execute();
     }
