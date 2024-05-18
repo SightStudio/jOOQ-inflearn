@@ -1,4 +1,4 @@
-# 섹션 5-1. ActiveRecord 패턴을 활용하여 데이터 조작하기
+# 섹션 5-1. 외래키를 통해 JOIN에서 ON절 생략하기
 
 - Docs
     - Implicit path join (~ 3.11)
@@ -14,7 +14,7 @@
 ## NOTICE
 해당 프로젝트는 4.2강의 testcontainers + flyway 형태로 작업되어있습니다.
 
-Implicit path join은 너무 가독성이 떨어져서 사용을 비추천한다.
+Implicit path join은 가독성이 떨어지고, 실수하기 쉬워 사용을 비추천한다.
 특히 **Implicit to-many path join** 는 사용하지 말자.
 
 다만 Explicit path join 외래키가 지원된다면 추천한다.

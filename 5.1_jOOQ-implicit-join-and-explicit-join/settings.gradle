@@ -1,2 +1,2 @@
-rootProject.name = 'jOOQ-implicit-join-and-explicit-join'
+rootProject.name = 'jOOQ-implicit-path-join-and-explicit-path-join'
 include 'jooq-custom'
