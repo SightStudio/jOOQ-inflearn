@@ -45,7 +45,26 @@ public class PerformanceListener implements ExecuteListener {
 }
 ```
 
-### 2. 슬로우 쿼리 실행 후 로그 확인
+### 2. jOOQ config에 PerformanceListener 등록
+Spring Boot 3.x 기준
+
+```java
+@Configuration
+public class JooqConfig {
+    @Bean
+    public DefaultConfigurationCustomizer jooqDefaultConfigurationCustomizer() {
+        return c -> {
+            c.set(PerformanceListener::new);
+            c.settings()
+                    .withExecuteDeleteWithoutWhere(ExecuteWithoutWhere.THROW)
+                    .withExecuteUpdateWithoutWhere(ExecuteWithoutWhere.THROW)
+                    .withRenderSchema(false);
+        };
+    }
+}
+```
+
+### 3. 슬로우 쿼리 실행 후 로그 확인
 ```java
 import static org.jooq.impl.DSL.*;
 
