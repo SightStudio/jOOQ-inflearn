@@ -73,6 +73,74 @@ dependency {
 }
 ```
 
+### 5. root build.gradle의 jOOQ database를 JPA database로 변경
+build.gradle
+```groovy
+
+jooq {
+    version = "${jooqVersion}"
+    configurations {
+        sakilaDB {
+            generationTool {
+                generator {
+                    name = 'org.jooq.codegen.DefaultGenerator'
+
+                    database {
+                        name = 'org.jooq.meta.extensions.jpa.JPADatabase'
+                        unsignedTypes = true
+
+                        properties {
+                            property {
+                                key = 'packages'
+                                value = 'com.sight.entity'
+                            }
+
+                            // DSL 생성시, jpa의 AttributeConverters 에 따라 jooq DSL의 타입을 매핑할지 여부
+                            property {
+                                key = 'useAttributeConverters'
+                                value = true
+                            }
+                        }
+
+                        forcedTypes {
+                            forcedType {
+                                userType = 'java.lang.Long'
+                                includeTypes = 'int unsigned'
+                            }
+
+                            forcedType {
+                                userType = 'java.lang.Integer'
+                                includeTypes = 'tinyint unsigned'
+                            }
+
+                            forcedType {
+                                userType = 'java.lang.Integer'
+                                includeTypes = 'smallint unsigned'
+                            }
+                        }
+                    }
+
+                    generate {
+                        daos = true
+                        records = true
+                        fluentSetters = true
+                        javaTimeTypes = true
+                        deprecated = false
+                    }
+
+                    target {
+                        directory = 'src/generated'
+                    }
+
+                    // jooq-custom 내부의 설정
+                    strategy.name = 'jooq.custom.generator.JPrefixGeneratorStrategy'
+                }
+            }
+        }
+    }
+}
+```
+
 ### 6. application 모듈의 generateSakilaDBJooq 테스크 실행
 
 ```groovy

@@ -1,5 +1,10 @@
 # 섹션 4-2. Testcontainers + Flyway를 통해 DDL로 jOOQ DSL 만들기
 
+gradle 플러그인
+- 여태까지 우리가 사용했던것
+  - https://github.com/etiennestuder/gradle-jooq-plugin
+- 이번에 우리가 사용할 것
+  - https://github.com/monosoul/jooq-gradle-plugin
 ### 1. jOOQ plugin 교체
 
 nu.studer.jooq -> dev.monosoul.jooq-docker로 교체
