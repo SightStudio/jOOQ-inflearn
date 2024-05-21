@@ -1,11 +1,11 @@
-# 섹션 5-1. 외래키를 통해 JOIN에서 ON절 생략하기
+# 섹션 5-1. path-based join을 통한 JOIN절 가독성 높이기
 
 - Docs
-    - Implicit path join (~ 3.11)
+    - Implicit path join (3.11 ~ )
         - https://www.jooq.org/doc/latest/manual/sql-building/sql-statements/select-statement/implicit-join/
-    - Implicit to-many path join (~ 3.19)
+    - Implicit to-many path join (3.19 ~ )
         - https://www.jooq.org/doc/latest/manual/sql-building/sql-statements/select-statement/implicit-to-many-join/
-    - Explicit path join (~ 3.19.5)
+    - Explicit path join (3.19 ~ )
         - https://www.jooq.org/doc/latest/manual/sql-building/sql-statements/select-statement/explicit-path-join/
     - Synthetic foreign keys (상용 라이센스만 가능)
         - https://www.jooq.org/doc/latest/manual/code-generation/codegen-advanced/codegen-config-database/codegen-database-synthetic-objects/codegen-database-synthetic-fks/
@@ -104,6 +104,28 @@ public class JooqJoinShortCutTest {
         Assertions.assertThat(original)
                 .usingRecursiveFieldByFieldElementComparator()
                 .isEqualTo(implicit);
+    }
+}
+```
+
+### 3. optional - jOOQ config
+
+```java
+@Configuration
+public class JooqConfig {
+    @Bean
+    public DefaultConfigurationCustomizer jooqDefaultConfigurationCustomizer() {
+        return c -> c.settings()
+                .withExecuteDeleteWithoutWhere(ExecuteWithoutWhere.THROW)
+                .withExecuteUpdateWithoutWhere(ExecuteWithoutWhere.THROW)
+                .withRenderSchema(false)
+
+                // implicit path join to-many는 기본적으로 에러를 발생시켜 이렇게 수동으로 조인을 지정 해야한다.
+                 .withRenderImplicitJoinToManyType(RenderImplicitJoinType.INNER_JOIN)
+
+                // implicit PATH JOIN many-to-one 을 비활성화 하고 싶다면 하고 싶다면
+//                 .withRenderImplicitJoinType(RenderImplicitJoinType.THROW)
+        ;
     }
 }
 ```
