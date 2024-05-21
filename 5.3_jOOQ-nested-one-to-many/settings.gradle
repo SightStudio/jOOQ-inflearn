@@ -1,0 +1,2 @@
+rootProject.name = 'jOOQ-nested-one-to-many'
+include 'jooq-custom'

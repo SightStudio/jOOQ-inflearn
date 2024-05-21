@@ -1,0 +1,120 @@
+import org.jooq.meta.jaxb.*
+
+buildscript {
+    ext {
+        jooqVersion = '3.19.5'
+    }
+}
+
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.2.3'
+    id 'io.spring.dependency-management' version '1.1.4'
+    id 'dev.monosoul.jooq-docker' version '6.0.14'
+}
+
+group = 'org.sight'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    sourceCompatibility = '17'
+}
+
+repositories {
+    mavenCentral()
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ["src/main/java", "src/generated"]
+        }
+    }
+}
+
+
+jooq {
+    version = "${jooqVersion}"
+    withContainer {
+        image {
+            name = "mysql:8.0.29"
+            envVars = [
+                    MYSQL_ROOT_PASSWORD: "passwd",
+                    MYSQL_DATABASE     : "sakila"
+            ]
+        }
+
+        db {
+            username = "root"
+            password = "passwd"
+            name = "sakila"
+            port = 3306
+            jdbc {
+                schema = "jdbc:mysql"
+                driverClassName = "com.mysql.cj.jdbc.Driver"
+            }
+        }
+    }
+}
+
+tasks {
+    generateJooqClasses {
+        schemas.set(["sakila"])
+        outputDirectory.set(project.layout.projectDirectory.dir("src/generated"))
+        includeFlywayTable.set(false)
+
+        usingJavaConfig {
+			generate = new Generate()
+					.withJavaTimeTypes(true)
+					.withDeprecated(false)
+					.withDaos(true)
+					.withFluentSetters(true)
+					.withRecords(true)
+
+            withStrategy(
+                    new Strategy().withName("jooq.custom.generator.JPrefixGeneratorStrategy")
+            )
+
+            database.withForcedTypes(
+                    new ForcedType()
+                            .withUserType("java.lang.Long")
+                            .withTypes("int unsigned"),
+                    new ForcedType()
+                            .withUserType("java.lang.Integer")
+                            .withTypes("tinyint unsigned"),
+                    new ForcedType()
+                            .withUserType("java.lang.Integer")
+                            .withTypes("smallint unsigned")
+            )
+        }
+    }
+}
+
+dependencies {
+    implementation "org.jooq:jooq:${jooqVersion}"
+
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation('org.springframework.boot:spring-boot-starter-jooq') {
+        exclude group: 'org.jooq'
+    }
+
+    runtimeOnly 'com.mysql:mysql-connector-j'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+
+    jooqCodegen project(':jooq-custom')
+    jooqCodegen "org.jooq:jooq:${jooqVersion}"
+    jooqCodegen "org.jooq:jooq-meta:${jooqVersion}"
+    jooqCodegen "org.jooq:jooq-codegen:${jooqVersion}"
+
+    jooqCodegen 'org.flywaydb:flyway-core:10.8.1'
+    jooqCodegen 'org.flywaydb:flyway-mysql:10.8.1'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
