@@ -1,0 +1,2 @@
+include 'jooq-custom'
+rootProject.name = 'jooq-with-kotlin'
