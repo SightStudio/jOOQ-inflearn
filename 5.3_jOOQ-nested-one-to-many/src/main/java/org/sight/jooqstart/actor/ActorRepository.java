@@ -58,14 +58,14 @@ public class ActorRepository {
         final JFilmActor FILM_ACTOR = JFilmActor.FILM_ACTOR;
         final JFilm FILM = JFilm.FILM;
 
-        Map<Actor, List<Film>> actorListMap = dslContext.select(
-                        row(ACTOR.fields()).as("actor"),
-                        row(FILM.fields()).as("film")
+        var actorListMap = dslContext.select(
+                        ACTOR,
+                        FILM
                 ).from(ACTOR)
                 .join(FILM_ACTOR)
-                .on(ACTOR.ACTOR_ID.eq(FILM_ACTOR.ACTOR_ID))
+                    .on(ACTOR.ACTOR_ID.eq(FILM_ACTOR.ACTOR_ID))
                 .join(FILM)
-                .on(FILM.FILM_ID.eq(FILM_ACTOR.FILM_ID))
+                    .on(FILM.FILM_ID.eq(FILM_ACTOR.FILM_ID))
                 .where(
                         // 배우 full name like 검색
                         containsIfNotBlank(ACTOR.FIRST_NAME.concat(" ").concat(ACTOR.LAST_NAME), searchOption.getActorName()),
@@ -74,8 +74,8 @@ public class ActorRepository {
                         containsIfNotBlank(FILM.TITLE, searchOption.getFilmTitle())
                 )
                 .fetchGroups(
-                        record -> record.get("actor", Actor.class),
-                        record -> record.get("film", Film.class)
+                        record -> record.get(ACTOR.$name(), Actor.class),
+                        record -> record.get(FILM.$name(), Film.class)
                 );
 
         return actorListMap.entrySet().stream()
