@@ -57,11 +57,27 @@ public class FilmRepository {
                 .fetchInto(FilmWithActor.class);
     }
 
+    // 강의에는 이렇게 썼지만
     public List<FilmWithActor> findFilmWithActorsListExplicitPathJoin (Long page, Long pageSize) {
         return dslContext.select(
                         DSL.row(FILM.fields()),
                         DSL.row(FILM.filmActor().fields()),
                         DSL.row(FILM.filmActor().actor().fields())
+                )
+                .from(FILM)
+                .join(FILM.filmActor())
+                .join(FILM.filmActor().actor())
+                .limit(pageSize)
+                .offset((page - 1) * pageSize)
+                .fetchInto(FilmWithActor.class);
+    }
+
+    // 이렇게도 쓸 수 있다.
+    public List<FilmWithActor> findFilmWithActorsListExplicitPathJoin (Long page, Long pageSize) {
+        return dslContext.select(
+                        FILM,
+                        FILM.filmActor(),
+                        FILM.filmActor().actor()
                 )
                 .from(FILM)
                 .join(FILM.filmActor())
